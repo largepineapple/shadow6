@@ -437,6 +437,7 @@
           file = e.target.files?.[0];
         if (!file) return;
         const uploadVersion = ++uploadVersions[index];
+        state.assets[index].pending = false;
         state.fileError = "";
         if (
           !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||

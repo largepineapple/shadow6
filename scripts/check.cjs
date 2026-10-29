@@ -97,33 +97,67 @@ async function main() {
     8000,
   );
   await page.locator("#fill-sample").click();
-  await page
-    .locator('[data-upload="0"]')
-    .setInputFiles({
-      name: "broken.png",
-      mimeType: "image/png",
-      buffer: Buffer.from("not an image"),
-    });
+  await page.locator('[data-upload="0"]').setInputFiles({
+    name: "broken.png",
+    mimeType: "image/png",
+    buffer: Buffer.from("not an image"),
+  });
   await page.locator(".inline-file-error").waitFor();
   assert.match(
     await page.locator(".inline-file-error").innerText(),
     /无法读取/,
   );
   assert.equal(await page.locator("#to-confirm").isEnabled(), true);
+  await page.locator('[data-upload="0"]').setInputFiles({
+    name: "photo.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+      "base64",
+    ),
+  });
+  await page.waitForFunction(
+    () => document.querySelector(".asset-top span")?.textContent === "本地照片",
+  );
+  checks.push("local image validation and successful read");
+  await page.evaluate(() => {
+    window.NativeImage = window.Image;
+    window.Image = class extends window.NativeImage {
+      set src(value) {
+        setTimeout(() => {
+          super.src = value;
+        }, 250);
+      }
+      get src() {
+        return super.src;
+      }
+    };
+  });
   await page
     .locator('[data-upload="0"]')
     .setInputFiles({
-      name: "photo.png",
+      name: "slow.png",
       mimeType: "image/png",
       buffer: Buffer.from(
         "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
         "base64",
       ),
     });
-  await page.waitForFunction(
-    () => document.querySelector(".asset-top span")?.textContent === "本地照片",
-  );
-  checks.push("local image validation and successful read");
+  assert.equal(await page.locator("#to-confirm").isDisabled(), true);
+  await page
+    .locator('[data-upload="0"]')
+    .setInputFiles({
+      name: "wrong.txt",
+      mimeType: "text/plain",
+      buffer: Buffer.from("invalid replacement"),
+    });
+  await page.waitForTimeout(400);
+  assert.equal(await page.locator("#to-confirm").isEnabled(), true);
+  assert.match(await page.locator(".inline-file-error").innerText(), /有效/);
+  await page.evaluate(() => {
+    window.Image = window.NativeImage;
+  });
+  checks.push("late image cannot override invalid replacement");
   await page.locator("#fill-sample").click();
   await caption(
     "第一步：已有成品、制作和环境三张照片，分别标记用途，避免文案与画面脱节。",

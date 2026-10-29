@@ -1,8 +1,9 @@
 {
-  "verifiedAt": "2026-10-29T14:57:18.652Z",
+  "verifiedAt": "2026-10-29T15:06:53.298Z",
   "checks": [
     "empty input validation",
     "local image validation and successful read",
+    "late image cannot override invalid replacement",
     "price validation",
     "failure retains brief and retry",
     "local rewrite isolation and undo",
@@ -15,6 +16,6 @@
     "browser draft isolation",
     "no uncaught browser errors"
   ],
-  "passed": 13,
-  "recorded": true
+  "passed": 14,
+  "recorded": false
 }
