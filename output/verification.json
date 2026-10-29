@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-10-29T14:57:18.652Z",
+  "checks": [
+    "empty input validation",
+    "local image validation and successful read",
+    "price validation",
+    "failure retains brief and retry",
+    "local rewrite isolation and undo",
+    "saved draft refresh recovery",
+    "text export",
+    "unknown price not invented",
+    "mobile no horizontal overflow",
+    "reduced motion",
+    "cancel stops late generation",
+    "browser draft isolation",
+    "no uncaught browser errors"
+  ],
+  "passed": 13,
+  "recorded": true
+}

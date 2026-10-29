@@ -1,0 +1,5 @@
+node_modules/
+.tools/
+*.log
+output/raw-video/
+output/pdf-review/

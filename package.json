@@ -1,0 +1,14 @@
+{
+  "name": "take-note-product-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "开拍小笺：小店主的素材到拍摄脚本交互原型",
+  "scripts": {
+    "check": "node --check demo/app.js",
+    "test": "node scripts/check.cjs",
+    "record": "node scripts/check.cjs --record"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}
